@@ -1,3 +1,4 @@
+import 'package:demo/gesture_page.dart';
 import 'package:demo/layout_page.dart';
 import 'package:demo/stateful_group_page.dart';
 import 'package:demo/stateless_group_page.dart';
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
         'less': (BuildContext context) => LessGroupPage(),
         'ful': (BuildContext context) => StatefulGroup(),
         'layout': (BuildContext context) => LayoutPage(),
+        'gesture': (BuildContext context) => GesturePage(),
       },
     );
   }
@@ -56,6 +58,7 @@ class _RouteNavigatorState extends State<RouteNavigator> {
             _item('StatelessWeight与基础组件', LessGroupPage(), 'less'),
             _item('StateFulWeight与基础组件', StatefulGroup(), 'ful'),
             _item('Flutter如何进行layout布局', LayoutPage(), 'layout'),
+            _item('如何检测用户手势和点击事件', GesturePage(), 'gesture'),
           ],
         ),
       ),
