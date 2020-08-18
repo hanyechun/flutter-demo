@@ -2,6 +2,7 @@ import 'package:demo/app_lifecycle.dart';
 import 'package:demo/gesture_page.dart';
 import 'package:demo/launch_page.dart';
 import 'package:demo/layout_page.dart';
+import 'package:demo/photo_page.dart';
 import 'package:demo/stateful_group_page.dart';
 import 'package:demo/stateless_group_page.dart';
 import 'package:demo/widget_lifecycle.dart';
@@ -56,6 +57,7 @@ class _DynamicThemeState extends State<DynamicTheme> {
         'launch': (BuildContext context) => LaunchPage(),
         'lifecycle': (BuildContext context) => WidgetLifecycle(),
         'applife': (BuildContext context) => AppLifecycle(),
+        'photo': (BuildContext context) => PhotoPage(),
       },
     );
   }
@@ -90,6 +92,7 @@ class _RouteNavigatorState extends State<RouteNavigator> {
         _item('如何打开第三方应用', LaunchPage(), 'launch'),
         _item('Flutter生命周期', WidgetLifecycle(), 'lifecycle'),
         _item('Flutter应用生命周期', AppLifecycle(), 'applife'),
+        _item('拍照', PhotoPage(), 'photo'),
       ],
     );
   }
