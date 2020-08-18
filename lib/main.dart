@@ -26,6 +26,7 @@ class _DynamicThemeState extends State<DynamicTheme> {
       title: 'Flutter Demo',
       theme: ThemeData(
         brightness: _isDayMode ? Brightness.light : Brightness.dark,
+//        fontFamily: 'Roboto-Light', //全局更换字体
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
