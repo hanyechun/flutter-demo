@@ -8,19 +8,45 @@ import 'package:demo/widget_lifecycle.dart';
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(DynamicTheme());
 }
 
-class MyApp extends StatelessWidget {
+class DynamicTheme extends StatefulWidget {
+  @override
+  _DynamicThemeState createState() => _DynamicThemeState();
+}
+
+class _DynamicThemeState extends State<DynamicTheme> {
+  bool _isDayMode = true;
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        brightness: _isDayMode ? Brightness.light : Brightness.dark,
         primarySwatch: Colors.blue,
       ),
-      home: RouteNavigator(),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('如何创建Flutter的路由与导航?'),
+        ),
+        body: Column(
+          children: [
+            SwitchListTile(
+              title: Text('切换${_isDayMode ? '夜' : '日'}间模式'),
+              value: _isDayMode,
+              onChanged: (value) {
+                setState(() {
+                  _isDayMode = value;
+                });
+              },
+            ),
+            RouteNavigator()
+          ],
+        ),
+      ),
       routes: <String, WidgetBuilder>{
         'less': (BuildContext context) => LessGroupPage(),
         'ful': (BuildContext context) => StatefulGroup(),
@@ -44,33 +70,26 @@ class _RouteNavigatorState extends State<RouteNavigator> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('如何创建Flutter的路由与导航?'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            SwitchListTile(
-              title: Text('${byName ? '' : '不'}通过路由名跳转'),
-              value: byName,
-              onChanged: (value) {
-                setState(() {
-                  byName = value;
-                });
-              },
-            ),
-            _item('StatelessWeight与基础组件', LessGroupPage(), 'less'),
-            _item('StateFulWeight与基础组件', StatefulGroup(), 'ful'),
-            _item('Flutter如何进行layout布局', LayoutPage(), 'layout'),
-            _item('如何检测用户手势和点击事件', GesturePage(), 'gesture'),
-            _item('如何打开第三方应用', LaunchPage(), 'launch'),
-            _item('Flutter生命周期', WidgetLifecycle(), 'lifecycle'),
-            _item('Flutter应用生命周期', AppLifecycle(), 'applife'),
-          ],
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        SwitchListTile(
+          title: Text('${byName ? '' : '不'}通过路由名跳转'),
+          value: byName,
+          onChanged: (value) {
+            setState(() {
+              byName = value;
+            });
+          },
         ),
-      ),
+        _item('StatelessWeight与基础组件', LessGroupPage(), 'less'),
+        _item('StateFulWeight与基础组件', StatefulGroup(), 'ful'),
+        _item('Flutter如何进行layout布局', LayoutPage(), 'layout'),
+        _item('如何检测用户手势和点击事件', GesturePage(), 'gesture'),
+        _item('如何打开第三方应用', LaunchPage(), 'launch'),
+        _item('Flutter生命周期', WidgetLifecycle(), 'lifecycle'),
+        _item('Flutter应用生命周期', AppLifecycle(), 'applife'),
+      ],
     );
   }
 
