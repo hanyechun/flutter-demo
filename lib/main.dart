@@ -1,3 +1,4 @@
+import 'package:demo/app_lifecycle.dart';
 import 'package:demo/gesture_page.dart';
 import 'package:demo/launch_page.dart';
 import 'package:demo/layout_page.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         'gesture': (BuildContext context) => GesturePage(),
         'launch': (BuildContext context) => LaunchPage(),
         'lifecycle': (BuildContext context) => WidgetLifecycle(),
+        'applife': (BuildContext context) => AppLifecycle(),
       },
     );
   }
@@ -65,6 +67,7 @@ class _RouteNavigatorState extends State<RouteNavigator> {
             _item('如何检测用户手势和点击事件', GesturePage(), 'gesture'),
             _item('如何打开第三方应用', LaunchPage(), 'launch'),
             _item('Flutter生命周期', WidgetLifecycle(), 'lifecycle'),
+            _item('Flutter应用生命周期', AppLifecycle(), 'applife'),
           ],
         ),
       ),
