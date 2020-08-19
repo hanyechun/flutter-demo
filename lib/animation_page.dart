@@ -5,29 +5,35 @@ class AnimationPage extends StatefulWidget {
   _AnimationPageState createState() => _AnimationPageState();
 }
 
+class AnimatedLogo extends AnimatedWidget {
+  AnimatedLogo({Key key, Animation<double> animation})
+      : super(key: key, listenable: animation);
+
+  @override
+  Widget build(BuildContext context) {
+    final Animation<double> animation = listenable;
+    return new Center(
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 10),
+        width: animation.value,
+        height: animation.value,
+        child: FlutterLogo(),
+      ),
+    );
+  }
+}
+
 class _AnimationPageState extends State<AnimationPage>
     with SingleTickerProviderStateMixin {
   Animation _animation;
   AnimationController _controller;
-  AnimationStatus _animationStatus;
-  double _animationValue;
 
   @override
   void initState() {
     super.initState();
     _controller =
         AnimationController(vsync: this, duration: Duration(seconds: 2));
-    _animation = Tween<double>(begin: 0, end: 300).animate(_controller)
-      ..addListener(() {
-        setState(() {
-          _animationValue = _animation.value;
-        });
-      })
-      ..addStatusListener((status) {
-        setState(() {
-          _animationStatus = status;
-        });
-      });
+    _animation = Tween<double>(begin: 0, end: 300).animate(_controller);
   }
 
   @override
@@ -51,13 +57,9 @@ class _AnimationPageState extends State<AnimationPage>
                   'start',
                 ),
               ),
-              Text('value: ' + _animationValue.toString()),
-              Text('status: ' + _animationStatus.toString()),
-              Container(
-                width: _animation.value,
-                height: _animation.value,
-                child: FlutterLogo(),
-              )
+              AnimatedLogo(
+                animation: _animation,
+              ),
             ],
           )),
     );
