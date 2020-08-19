@@ -1,6 +1,7 @@
 import 'package:demo/animation_page.dart';
 import 'package:demo/app_lifecycle.dart';
 import 'package:demo/gesture_page.dart';
+import 'package:demo/hero_page.dart';
 import 'package:demo/image_page.dart';
 import 'package:demo/launch_page.dart';
 import 'package:demo/layout_page.dart';
@@ -62,6 +63,7 @@ class _DynamicThemeState extends State<DynamicTheme> {
         'photo': (BuildContext context) => PhotoPage(),
         'image': (BuildContext context) => ImageWidgetPage(),
         'animation': (BuildContext context) => AnimationPage(),
+        'hero': (BuildContext context) => HeroAnimation(),
       },
     );
   }
@@ -99,6 +101,7 @@ class _RouteNavigatorState extends State<RouteNavigator> {
         _item('拍照', PhotoPage(), 'photo'),
         _item('ImageWidget', ImageWidgetPage(), 'image'),
         _item('Animation', AnimationPage(), 'animation'),
+        _item('Hero动画使用', HeroAnimation(), 'hero'),
       ],
     );
   }
