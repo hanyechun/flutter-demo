@@ -5,6 +5,7 @@ import 'package:demo/hero_page.dart';
 import 'package:demo/image_page.dart';
 import 'package:demo/launch_page.dart';
 import 'package:demo/layout_page.dart';
+import 'package:demo/navigator/tab_navigator.dart';
 import 'package:demo/photo_page.dart';
 import 'package:demo/stateful_group_page.dart';
 import 'package:demo/stateless_group_page.dart';
@@ -64,6 +65,7 @@ class _DynamicThemeState extends State<DynamicTheme> {
         'image': (BuildContext context) => ImageWidgetPage(),
         'animation': (BuildContext context) => AnimationPage(),
         'hero': (BuildContext context) => HeroAnimation(),
+        'trip': (BuildContext context) => TabNavigator(),
       },
     );
   }
@@ -102,6 +104,7 @@ class _RouteNavigatorState extends State<RouteNavigator> {
         _item('ImageWidget', ImageWidgetPage(), 'image'),
         _item('Animation', AnimationPage(), 'animation'),
         _item('Hero动画使用', HeroAnimation(), 'hero'),
+        _item('携程demo', TabNavigator(), 'trip'),
       ],
     );
   }
