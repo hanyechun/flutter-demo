@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:demo/animation_page.dart';
 import 'package:demo/app_lifecycle.dart';
 import 'package:demo/gesture_page.dart';
@@ -11,9 +13,15 @@ import 'package:demo/stateful_group_page.dart';
 import 'package:demo/stateless_group_page.dart';
 import 'package:demo/widget_lifecycle.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(DynamicTheme());
+  if (Platform.isAndroid) {
+    SystemUiOverlayStyle style =
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+    SystemChrome.setSystemUIOverlayStyle(style);
+  }
 }
 
 class DynamicTheme extends StatefulWidget {
