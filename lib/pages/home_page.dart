@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -19,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   ];
   double _appBarAlpha = 0;
   String showResult = '';
+  int counter = 0;
 
   Future<CommonModel> fetchPost() async {
     final response = await http
@@ -57,6 +59,12 @@ class _HomePageState extends State<HomePage> {
                       itemCount: _imageUrl.length,
                       autoplay: true,
                     ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      _incrementCounter();
+                    },
+                    child: Text('$counter'),
                   ),
                   InkWell(
                     onTap: () {
@@ -99,6 +107,16 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _appBarAlpha = alpha;
     });
+  }
+
+  _incrementCounter() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+//    prefs.remove('counter');
+    setState(() {
+      counter = prefs.getInt('counter') ?? 100;
+    });
+    counter--;
+    await prefs.setInt('counter', counter);
   }
 }
 
