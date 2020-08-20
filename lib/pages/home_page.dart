@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   @override
@@ -15,6 +18,14 @@ class _HomePageState extends State<HomePage> {
     'http://www.devio.org/img/avatar.png'
   ];
   double _appBarAlpha = 0;
+  String showResult = '';
+
+  Future<CommonModel> fetchPost() async {
+    final response = await http
+        .get('http://www.devio.org/io/flutter_app/json/test_common_model.json');
+    final result = json.decode(Utf8Decoder().convert(response.bodyBytes));
+    return CommonModel.fromJson(result);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +58,19 @@ class _HomePageState extends State<HomePage> {
                       autoplay: true,
                     ),
                   ),
-                  Container(
-                    height: 800,
-                    child: ListTile(
-                      title: Text('flkdsnglksn'),
-                    ),
+                  InkWell(
+                    onTap: () {
+                      fetchPost().then((value) {
+                        setState(() {
+                          showResult = value.icon;
+                        });
+                      });
+                    },
+                    child: Text('点我请求'),
+                  ),
+                  Image.network(
+                    showResult,
+                    fit: BoxFit.fill,
                   )
                 ],
               )),
@@ -80,5 +99,21 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       _appBarAlpha = alpha;
     });
+  }
+}
+
+class CommonModel {
+  final String icon;
+  final String title;
+  final String url;
+
+  CommonModel({this.icon, this.title, this.url});
+
+  factory CommonModel.fromJson(Map<String, dynamic> json) {
+    return CommonModel(
+      icon: json['icon'],
+      title: json['title'],
+      url: json['url'],
+    );
   }
 }
