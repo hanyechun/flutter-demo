@@ -1,8 +1,8 @@
-import 'dart:convert';
-
+import 'package:demo/dao/home_dao.dart';
+import 'package:demo/model/home_page_entity.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,80 +21,90 @@ class _HomePageState extends State<HomePage> {
   double _appBarAlpha = 0;
   String showResult = '';
   int counter = 0;
+  HomePageEntity _homePageEntity;
 
-  Future<CommonModel> fetchPost() async {
-    final response = await http
-        .get('http://www.devio.org/io/flutter_app/json/test_common_model.json');
-    final result = json.decode(Utf8Decoder().convert(response.bodyBytes));
-    return CommonModel.fromJson(result);
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  _loadData() {
+    HomeDao.fetch().then((value) {
+      setState(() {
+        _homePageEntity = value;
+      });
+    }).catchError((onError) {
+      debugPrint(onError);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Color(0xfff2f2f2),
         body: Stack(
-      children: [
-        MediaQuery.removePadding(
-          removeTop: true,
-          context: context,
-          child: NotificationListener<ScrollNotification>(
-              onNotification: (notification) {
-                if (notification is ScrollUpdateNotification &&
-                    notification.depth == 0)
-                  _onScroll(notification.metrics.pixels);
-                return true;
-              },
-              child: ListView(
-                children: [
-                  Container(
-                    height: 160,
-                    child: Swiper(
-                      itemBuilder: (BuildContext context, int index) {
-                        return Image.network(
-                          _imageUrl[index],
-                          fit: BoxFit.fill,
-                        );
-                      },
-                      pagination: SwiperPagination(),
-                      itemCount: _imageUrl.length,
-                      autoplay: true,
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      _incrementCounter();
-                    },
-                    child: Text('$counter'),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      fetchPost().then((value) {
-                        setState(() {
-                          showResult = value.icon;
-                        });
-                      });
-                    },
-                    child: Text('点我请求'),
-                  ),
-                  Image.network(
-                    showResult,
-                    fit: BoxFit.fill,
-                  )
-                ],
-              )),
-        ),
-        Opacity(
-          opacity: _appBarAlpha,
-          child: Container(
-            alignment: Alignment.center,
-            padding: EdgeInsets.only(top: 20),
-            height: 80,
-            decoration: BoxDecoration(color: Colors.white),
-            child: Text('首页'),
-          ),
-        )
-      ],
-    ));
+          children: [
+            MediaQuery.removePadding(
+              removeTop: true,
+              context: context,
+              child: NotificationListener<ScrollNotification>(
+                  onNotification: (notification) {
+                    if (notification is ScrollUpdateNotification &&
+                        notification.depth == 0)
+                      _onScroll(notification.metrics.pixels);
+                    return true;
+                  },
+                  child: ListView(
+                    children: [
+                      Container(
+                        height: 160,
+                        child: Swiper(
+                          itemBuilder: (BuildContext context, int index) {
+                            return Image.network(
+                              _imageUrl[index],
+                              fit: BoxFit.fill,
+                            );
+                          },
+                          pagination: SwiperPagination(),
+                          itemCount: _imageUrl.length,
+                          autoplay: true,
+                        ),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(5)),
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                                child: Wrap(
+                                  alignment: WrapAlignment.spaceBetween,
+                                  children: _items(),
+                                ),
+                              ))),
+                      InkWell(
+                        onTap: () {
+                          _incrementCounter();
+                        },
+                        child: Text('$counter'),
+                      ),
+                    ],
+                  )),
+            ),
+            Opacity(
+              opacity: _appBarAlpha,
+              child: Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(top: 20),
+                height: 80,
+                decoration: BoxDecoration(color: Colors.white),
+                child: Text('首页'),
+              ),
+            )
+          ],
+        ));
   }
 
   _onScroll(offset) {
@@ -118,20 +128,22 @@ class _HomePageState extends State<HomePage> {
     counter--;
     await prefs.setInt('counter', counter);
   }
-}
 
-class CommonModel {
-  final String icon;
-  final String title;
-  final String url;
-
-  CommonModel({this.icon, this.title, this.url});
-
-  factory CommonModel.fromJson(Map<String, dynamic> json) {
-    return CommonModel(
-      icon: json['icon'],
-      title: json['title'],
-      url: json['url'],
-    );
+  List<Widget> _items() {
+    return _homePageEntity.localNavList.map((localNav) {
+      return Column(
+        children: [
+          Image.network(
+            localNav.icon,
+            height: 32,
+            width: 32,
+          ),
+          Text(
+            localNav.title,
+            style: TextStyle(fontSize: 12),
+          )
+        ],
+      );
+    }).toList();
   }
 }
