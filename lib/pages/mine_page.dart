@@ -57,6 +57,7 @@ class _MinePageState extends State<MinePage> {
     return Container(
       height: 150,
       alignment: Alignment.center,
+      margin: EdgeInsets.only(bottom: 5),
       decoration: BoxDecoration(color: Colors.green),
       child: Text(
         city,
