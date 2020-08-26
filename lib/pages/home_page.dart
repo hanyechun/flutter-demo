@@ -1,5 +1,6 @@
 import 'package:demo/dao/home_dao.dart';
 import 'package:demo/model/home_page_entity.dart';
+import 'package:demo/widgets/webview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -131,19 +132,32 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> _items() {
     return _homePageEntity.localNavList.map((localNav) {
-      return Column(
-        children: [
-          Image.network(
-            localNav.icon,
-            height: 32,
-            width: 32,
-          ),
-          Text(
-            localNav.title,
-            style: TextStyle(fontSize: 12),
-          )
-        ],
-      );
+      return InkWell(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => WebView(
+                          url: localNav.url,
+                          statusBarColor:
+                              int.parse('0xff' + localNav.statusBarColor),
+                          title: localNav.title,
+                          hideAppBar: localNav.hideAppBar,
+                        )));
+          },
+          child: Column(
+            children: [
+              Image.network(
+                localNav.icon,
+                height: 32,
+                width: 32,
+              ),
+              Text(
+                localNav.title,
+                style: TextStyle(fontSize: 12),
+              )
+            ],
+          ));
     }).toList();
   }
 }
