@@ -1,5 +1,6 @@
 import 'package:demo/dao/home_dao.dart';
 import 'package:demo/model/home_page_entity.dart';
+import 'package:demo/widgets/grid_nav.dart';
 import 'package:demo/widgets/webview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -85,6 +86,10 @@ class _HomePageState extends State<HomePage> {
                                   children: _items(),
                                 ),
                               ))),
+                      Padding(
+                          padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                          child: GridNav(
+                              homePageGridNav: _homePageEntity?.gridNav)),
                       InkWell(
                         onTap: () {
                           _incrementCounter();
@@ -131,6 +136,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Widget> _items() {
+    if (_homePageEntity == null) return [];
     return _homePageEntity.localNavList.map((localNav) {
       return InkWell(
           onTap: () {
