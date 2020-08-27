@@ -76,20 +76,32 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                           padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                           child: Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(5)),
-                              child: Padding(
-                                padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
-                                child: Wrap(
-                                  alignment: WrapAlignment.spaceBetween,
-                                  children: _items(),
-                                ),
-                              ))),
+                            padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Wrap(
+                              alignment: WrapAlignment.spaceBetween,
+                              children: _items(),
+                            ),
+                          )),
                       Padding(
                           padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                           child: GridNav(
                               homePageGridNav: _homePageEntity?.gridNav)),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Wrap(
+                            alignment: WrapAlignment.spaceAround,
+                            children: _subItems(),
+                          ),
+                        ),
+                      ),
                       InkWell(
                         onTap: () {
                           _incrementCounter();
@@ -163,6 +175,42 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(fontSize: 12),
               )
             ],
+          ));
+    }).toList();
+  }
+
+  _subItems() {
+    if (_homePageEntity == null) return [];
+    return _homePageEntity.subNavList.map((subNav) {
+      return Container(
+          width: 60,
+          height: 40,
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => WebView(
+                            url: subNav.url,
+                            statusBarColor: int.parse('0xffffffff'),
+                            title: subNav.title,
+                            hideAppBar: subNav.hideAppBar,
+                          )));
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.network(
+                  subNav.icon,
+                  width: 18,
+                  height: 18,
+                ),
+                Text(
+                  subNav.title,
+                  style: TextStyle(fontSize: 12),
+                )
+              ],
+            ),
           ));
     }).toList();
   }
