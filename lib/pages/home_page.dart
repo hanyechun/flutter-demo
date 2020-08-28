@@ -61,15 +61,8 @@ class _HomePageState extends State<HomePage> {
                         child: _images != null
                             ? Swiper(
                                 onTap: (index) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => WebView(
-                                              url: _images[index].url,
-                                              statusBarColor:
-                                                  int.parse('0x00000000'),
-                                              title: 'banner',
-                                              hideAppBar: true)));
+                                  _jumpWebView(_images[index].url,
+                                      int.parse('0x00000000'), 'banner', true);
                                 },
                                 itemBuilder: (BuildContext context, int index) {
                                   return Image.network(
@@ -174,16 +167,11 @@ class _HomePageState extends State<HomePage> {
     return _homePageEntity.localNavList.map((localNav) {
       return InkWell(
           onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => WebView(
-                          url: localNav.url,
-                          statusBarColor:
-                              int.parse('0xff' + localNav.statusBarColor),
-                          title: localNav.title,
-                          hideAppBar: localNav.hideAppBar,
-                        )));
+            _jumpWebView(
+                localNav.url,
+                int.parse('0xff' + localNav.statusBarColor),
+                localNav.title,
+                localNav.hideAppBar);
           },
           child: Column(
             children: [
@@ -209,15 +197,8 @@ class _HomePageState extends State<HomePage> {
           height: 40,
           child: InkWell(
             onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => WebView(
-                            url: subNav.url,
-                            statusBarColor: int.parse('0xffffffff'),
-                            title: subNav.title,
-                            hideAppBar: subNav.hideAppBar,
-                          )));
+              _jumpWebView(subNav.url, int.parse('0xffffffff'), subNav.title,
+                  subNav.hideAppBar);
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -307,5 +288,17 @@ class _HomePageState extends State<HomePage> {
         ),
       ],
     );
+  }
+
+  _jumpWebView(String url, int color, String title, bool hideAppBar) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => WebView(
+                  url: url,
+                  statusBarColor: color,
+                  title: title,
+                  hideAppBar: hideAppBar,
+                )));
   }
 }
