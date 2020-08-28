@@ -15,11 +15,7 @@ class HomePage extends StatefulWidget {
 const APPBAR_SCROLL_OFFSET = 100;
 
 class _HomePageState extends State<HomePage> {
-  List _imageUrl = [
-    'http://www.devio.org/img/avatar.png',
-    'http://www.devio.org/img/avatar.png',
-    'http://www.devio.org/img/avatar.png'
-  ];
+  List<HomePageBannerList> _images;
   double _appBarAlpha = 0;
   String showResult = '';
   int counter = 0;
@@ -35,6 +31,7 @@ class _HomePageState extends State<HomePage> {
     HomeDao.fetch().then((value) {
       setState(() {
         _homePageEntity = value;
+        _images = _homePageEntity.bannerList;
       });
     }).catchError((onError) {
       debugPrint(onError);
@@ -61,17 +58,31 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       Container(
                         height: 160,
-                        child: Swiper(
-                          itemBuilder: (BuildContext context, int index) {
-                            return Image.network(
-                              _imageUrl[index],
-                              fit: BoxFit.fill,
-                            );
-                          },
-                          pagination: SwiperPagination(),
-                          itemCount: _imageUrl.length,
-                          autoplay: true,
-                        ),
+                        child: _images != null
+                            ? Swiper(
+                                onTap: (index) {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => WebView(
+                                              url: _images[index].url,
+                                              statusBarColor:
+                                                  int.parse('0x00000000'),
+                                              title: 'banner',
+                                              hideAppBar: true)));
+                                },
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Image.network(
+                                    _images[index].icon,
+                                    fit: BoxFit.fill,
+                                  );
+                                },
+                                pagination: SwiperPagination(),
+                                itemCount: _images.length,
+                                autoplay: true,
+                                autoplayDelay: 5000,
+                              )
+                            : null,
                       ),
                       Padding(
                           padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
