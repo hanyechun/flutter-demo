@@ -113,6 +113,17 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5)),
+                          child: Column(
+                            children: _saleBoxItems(),
+                          ),
+                        ),
+                      ),
                       InkWell(
                         onTap: () {
                           _incrementCounter();
@@ -224,5 +235,77 @@ class _HomePageState extends State<HomePage> {
             ),
           ));
     }).toList();
+  }
+
+  _saleBoxItems() {
+    List<Widget> items = [];
+    if (_homePageEntity == null) return items;
+    items.add(_saleBoxTopItem());
+    items.add(_saleBoxItem(_homePageEntity.salesBox.bigCard1.icon,
+        _homePageEntity.salesBox.bigCard2.icon, true));
+    items.add(_saleBoxItem(_homePageEntity.salesBox.smallCard1.icon,
+        _homePageEntity.salesBox.smallCard2.icon, false));
+    items.add(_saleBoxItem(_homePageEntity.salesBox.smallCard3.icon,
+        _homePageEntity.salesBox.smallCard4.icon, false));
+    return items;
+  }
+
+  _saleBoxTopItem() {
+    return Container(
+      height: 44,
+      padding: EdgeInsets.only(left: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Image.network(
+            _homePageEntity.salesBox.icon,
+            height: 15,
+            fit: BoxFit.fill,
+          ),
+          Container(
+            margin: EdgeInsets.only(right: 10),
+            padding: EdgeInsets.fromLTRB(7, 1, 7, 2),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                gradient: LinearGradient(colors: [
+                  Color(0xffff4e63),
+                  Color(0xffff6cc9),
+                ], begin: Alignment.centerLeft, end: Alignment.centerRight)),
+            child: Text(
+              '获取更多福利>',
+              style: TextStyle(color: Colors.white, fontSize: 12),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  _saleBoxItem(String icon1, String icon2, bool big) {
+    BorderSide borderSide = BorderSide(color: Color(0xfff2f2f2), width: 0.8);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Container(
+          decoration:
+              BoxDecoration(border: Border(right: borderSide, top: borderSide)),
+          child: Image.network(
+            icon1,
+            width: MediaQuery.of(context).size.width / 2 - 10.5,
+            height: big ? 129 : 80,
+            fit: BoxFit.fill,
+          ),
+        ),
+        Container(
+          decoration: BoxDecoration(border: Border(top: borderSide)),
+          child: Image.network(
+            icon2,
+            width: MediaQuery.of(context).size.width / 2 - 10.5,
+            height: big ? 129 : 80,
+            fit: BoxFit.fill,
+          ),
+        ),
+      ],
+    );
   }
 }
