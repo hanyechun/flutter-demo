@@ -179,7 +179,7 @@ class _HomePageState extends State<HomePage> {
     }).toList();
   }
 
-  _subItems() {
+  List<Widget> _subItems() {
     if (_homePageEntity == null) return [];
     return _homePageEntity.subNavList.map((subNav) {
       return Container(
