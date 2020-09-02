@@ -1,3 +1,4 @@
+import 'package:demo/widgets/search_bar.dart';
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
@@ -15,11 +16,30 @@ const CITY_NAMES = {
 class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ListView(
-        children: _buildList(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Search'),
+        leading: null,
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+            child: SearchBar(
+              hideLeft: true,
+              hint: '酒店 机票',
+              rightButtonClick: null,
+              onChanged: null,
+            ),
+          )
+        ],
       ),
     );
+//    Container(
+//      child: ListView(
+//        children: _buildList(),
+//      ),
+//    )
   }
 
   List<Widget> _buildList() {
