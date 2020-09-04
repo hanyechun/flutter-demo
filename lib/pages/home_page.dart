@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
         _images = _homePageEntity.bannerList;
       });
     }).catchError((onError) {
-      debugPrint(onError);
+      print(onError);
     });
   }
 
