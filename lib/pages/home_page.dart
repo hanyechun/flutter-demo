@@ -14,7 +14,8 @@ class HomePage extends StatefulWidget {
 
 const APPBAR_SCROLL_OFFSET = 100;
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
   List<HomePageBannerList> _images;
   double _appBarAlpha = 0;
   String showResult = '';
@@ -40,6 +41,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
         backgroundColor: Color(0xfff2f2f2),
         body: Stack(
@@ -301,4 +303,7 @@ class _HomePageState extends State<HomePage> {
                   hideAppBar: hideAppBar,
                 )));
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
