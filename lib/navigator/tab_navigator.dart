@@ -3,6 +3,7 @@ import 'package:demo/pages/mine_page.dart';
 import 'package:demo/pages/search_page.dart';
 import 'package:demo/pages/travel_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_splash_screen/flutter_splash_screen.dart';
 
 class TabNavigator extends StatefulWidget {
   @override
@@ -16,80 +17,98 @@ class _TabNavigatorState extends State<TabNavigator> {
   int _currentIndex = 0;
 
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(milliseconds: 500), () {
+      FlutterSplashScreen.hide();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PageView(
-        controller: _controller,
-        physics: NeverScrollableScrollPhysics(),
-        children: [HomePage(), SearchPage(), TravelPage(), MinePage()],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-          onTap: (index) {
-            _controller.jumpToPage(index);
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          type: BottomNavigationBarType.fixed,
-          items: [
-            BottomNavigationBarItem(
-                title: Text(
-                  '首页',
-                  style: TextStyle(
-                      color: _currentIndex == 0 ? _activeColor : _defaultColor),
-                ),
-                icon: Icon(
-                  Icons.home,
-                  color: _defaultColor,
-                ),
-                activeIcon: Icon(
-                  Icons.home,
-                  color: _activeColor,
-                )),
-            BottomNavigationBarItem(
-                title: Text(
-                  '搜索',
-                  style: TextStyle(
-                      color: _currentIndex == 1 ? _activeColor : _defaultColor),
-                ),
-                icon: Icon(
-                  Icons.search,
-                  color: _defaultColor,
-                ),
-                activeIcon: Icon(
-                  Icons.search,
-                  color: _activeColor,
-                )),
-            BottomNavigationBarItem(
-                title: Text(
-                  '旅拍',
-                  style: TextStyle(
-                      color: _currentIndex == 2 ? _activeColor : _defaultColor),
-                ),
-                icon: Icon(
-                  Icons.camera_alt,
-                  color: _defaultColor,
-                ),
-                activeIcon: Icon(
-                  Icons.camera_alt,
-                  color: _activeColor,
-                )),
-            BottomNavigationBarItem(
-                title: Text(
-                  '我的',
-                  style: TextStyle(
-                      color: _currentIndex == 3 ? _activeColor : _defaultColor),
-                ),
-                icon: Icon(
-                  Icons.account_circle,
-                  color: _defaultColor,
-                ),
-                activeIcon: Icon(
-                  Icons.account_circle,
-                  color: _activeColor,
-                )),
-          ]),
-    );
+    return MaterialApp(
+        theme: ThemeData(primarySwatch: Colors.blue),
+        home: Scaffold(
+          body: PageView(
+            controller: _controller,
+            physics: NeverScrollableScrollPhysics(),
+            children: [HomePage(), SearchPage(), TravelPage(), MinePage()],
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+              currentIndex: _currentIndex,
+              onTap: (index) {
+                _controller.jumpToPage(index);
+                setState(() {
+                  _currentIndex = index;
+                });
+              },
+              type: BottomNavigationBarType.fixed,
+              items: [
+                BottomNavigationBarItem(
+                    title: Text(
+                      '首页',
+                      style: TextStyle(
+                          color: _currentIndex == 0
+                              ? _activeColor
+                              : _defaultColor),
+                    ),
+                    icon: Icon(
+                      Icons.home,
+                      color: _defaultColor,
+                    ),
+                    activeIcon: Icon(
+                      Icons.home,
+                      color: _activeColor,
+                    )),
+                BottomNavigationBarItem(
+                    title: Text(
+                      '搜索',
+                      style: TextStyle(
+                          color: _currentIndex == 1
+                              ? _activeColor
+                              : _defaultColor),
+                    ),
+                    icon: Icon(
+                      Icons.search,
+                      color: _defaultColor,
+                    ),
+                    activeIcon: Icon(
+                      Icons.search,
+                      color: _activeColor,
+                    )),
+                BottomNavigationBarItem(
+                    title: Text(
+                      '旅拍',
+                      style: TextStyle(
+                          color: _currentIndex == 2
+                              ? _activeColor
+                              : _defaultColor),
+                    ),
+                    icon: Icon(
+                      Icons.camera_alt,
+                      color: _defaultColor,
+                    ),
+                    activeIcon: Icon(
+                      Icons.camera_alt,
+                      color: _activeColor,
+                    )),
+                BottomNavigationBarItem(
+                    title: Text(
+                      '我的',
+                      style: TextStyle(
+                          color: _currentIndex == 3
+                              ? _activeColor
+                              : _defaultColor),
+                    ),
+                    icon: Icon(
+                      Icons.account_circle,
+                      color: _defaultColor,
+                    ),
+                    activeIcon: Icon(
+                      Icons.account_circle,
+                      color: _activeColor,
+                    )),
+              ]),
+        ));
   }
 }

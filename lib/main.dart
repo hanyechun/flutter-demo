@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 void main() {
-  runApp(DynamicTheme());
+  runApp(TabNavigator());
   if (Platform.isAndroid) {
     SystemUiOverlayStyle style =
         SystemUiOverlayStyle(statusBarColor: Colors.transparent);
