@@ -1,3 +1,6 @@
+import 'package:demo/dao/travel_tab_dao.dart';
+import 'package:demo/model/travel_tab_entity.dart';
+import 'package:demo/pages/travel_tab_page.dart';
 import 'package:flutter/material.dart';
 
 class TravelPage extends StatefulWidget {
@@ -5,32 +8,65 @@ class TravelPage extends StatefulWidget {
   _TravelPageState createState() => _TravelPageState();
 }
 
-const CITY_NAME = ['粉丝', '刚发的', '刚发的', '换个', '火凤凰', '好烦好烦', '火凤凰更好'];
+class _TravelPageState extends State<TravelPage> with TickerProviderStateMixin {
+  TabController _controller;
+  TravelTabEntity _tabEntity;
+  List<TravelTabTab> _tabs = [];
 
-class _TravelPageState extends State<TravelPage> {
+  @override
+  void initState() {
+    _controller = TabController(length: _tabs.length, vsync: this);
+    TravelTabDao.fetch().then((value) {
+      setState(() {
+        _tabEntity = value;
+        _tabs = value.tabs;
+        _controller = TabController(length: _tabs.length, vsync: this);
+      });
+    }).catchError((onError) {
+      print(onError);
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: GridView.count(
-        crossAxisCount: 2,
-        children: _buildCities(),
-      ),
-    );
-  }
-
-  List<Widget> _buildCities() {
-    return CITY_NAME.map((city) => _item(city)).toList();
-  }
-
-  Widget _item(String city) {
-    return Container(
-      height: 50,
-      alignment: Alignment.center,
-      margin: EdgeInsets.only(bottom: 5),
-      decoration: BoxDecoration(color: Colors.teal),
-      child: Text(
-        city,
-        style: TextStyle(color: Colors.white),
+    return Scaffold(
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.only(top: 20),
+            color: Colors.white,
+            child: TabBar(
+                controller: _controller,
+                isScrollable: true,
+                labelColor: Colors.black,
+                labelPadding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                indicator: UnderlineTabIndicator(
+                  borderSide: BorderSide(color: Color(0xff2fcfbb), width: 3),
+                ),
+                tabs: _tabs.map((tab) {
+                  return Tab(
+                    text: tab.labelName,
+                  );
+                }).toList()),
+          ),
+          Flexible(
+              child: TabBarView(
+                  controller: _controller,
+                  children: _tabs.map((tab) {
+                    return TravelTabPage(
+                      travelUrl: _tabEntity.url,
+                      params: _tabEntity.params,
+                      groupChannelCode: tab.groupChannelCode,
+                    );
+                  }).toList()))
+        ],
       ),
     );
   }

@@ -1,6 +1,9 @@
 import 'package:demo/model/search_entity.dart';
 
 searchEntityFromJson(SearchEntity data, Map<String, dynamic> json) {
+	if (json['keyword'] != null) {
+		data.keyword = json['keyword']?.toString();
+	}
 	if (json['data'] != null) {
 		data.data = new List<SearchData>();
 		(json['data'] as List).forEach((v) {
@@ -12,6 +15,7 @@ searchEntityFromJson(SearchEntity data, Map<String, dynamic> json) {
 
 Map<String, dynamic> searchEntityToJson(SearchEntity entity) {
 	final Map<String, dynamic> data = new Map<String, dynamic>();
+	data['keyword'] = entity.keyword;
 	if (entity.data != null) {
 		data['data'] =  entity.data.map((v) => v.toJson()).toList();
 	}
