@@ -1,6 +1,7 @@
 import 'package:demo/dao/travel_page_dao.dart';
 import 'package:demo/model/travel_page_entity.dart';
 import 'package:demo/model/travel_tab_entity.dart';
+import 'package:demo/widgets/loading_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
@@ -23,45 +24,73 @@ class TravelTabPage extends StatefulWidget {
 
 class _TravelTabPageState extends State<TravelTabPage>
     with AutomaticKeepAliveClientMixin {
+  bool _isLoading = true, noMore = false;
+  ScrollController _scrollController;
   int pageIndex = 1;
   List<TravelPageResultList> travelItems;
 
   @override
   void initState() {
+    _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      if (!noMore &&
+          _scrollController.position.pixels ==
+              _scrollController.position.maxScrollExtent) {
+        _loadData(loadMore: true);
+      }
+    });
     _loadData();
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    return Container(
-      child: StaggeredGridView.countBuilder(
-        crossAxisCount: 4,
-        itemCount: travelItems?.length ?? 0,
-        itemBuilder: (BuildContext context, int index) => _TravelItem(
-          index: index,
-          travelItem: travelItems[index],
-        ),
-        staggeredTileBuilder: (int index) => new StaggeredTile.fit(2),
-        mainAxisSpacing: 4.0,
-        crossAxisSpacing: 4.0,
-      ),
-    );
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
-  void _loadData() {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    return LoadingContainer(
+        isLoading: _isLoading,
+        child: RefreshIndicator(
+            onRefresh: _handleRefresh,
+            child: MediaQuery.removePadding(
+              context: context,
+              removeTop: true,
+              child: StaggeredGridView.countBuilder(
+                controller: _scrollController,
+                crossAxisCount: 4,
+                itemCount: travelItems?.length ?? 0,
+                itemBuilder: (BuildContext context, int index) => _TravelItem(
+                  index: index,
+                  travelItem: travelItems[index],
+                ),
+                staggeredTileBuilder: (int index) => new StaggeredTile.fit(2),
+                mainAxisSpacing: 4.0,
+                crossAxisSpacing: 4.0,
+              ),
+            )));
+  }
+
+  void _loadData({loadMore = false}) {
+    loadMore ? pageIndex++ : pageIndex = 1;
     TravelPageDao.fetch(widget.travelUrl ?? TRAVEL_URL, widget.params,
             widget.groupChannelCode, pageIndex, PAGE_SIZE)
         .then((value) {
+      _isLoading = false;
+      noMore = value.resultList == null || value.resultList.length == 0;
       setState(() {
-        if (travelItems == null) {
+        if (pageIndex == 1) {
           travelItems = value.resultList;
         } else {
           travelItems.addAll(value.resultList);
         }
       });
     }).catchError((e) {
+      _isLoading = false;
+      noMore = true;
       print(e);
     });
   }
@@ -69,6 +98,10 @@ class _TravelTabPageState extends State<TravelTabPage>
   @override
   // tab保活，防止每次切换tab都重新加载
   bool get wantKeepAlive => true;
+
+  Future<void> _handleRefresh() async {
+    _loadData();
+  }
 }
 
 class _TravelItem extends StatelessWidget {
